@@ -1,11 +1,10 @@
 [package]
 name = "mellow-core"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 [dependencies]
-tokio = { version = "1.51.1", features = ["full"] }
-rayon = "1.12.0"
-tree-sitter = "0.26.8"
 clap = { version = "4.6.0", features = ["derive"] }
-tree-sitter-python = "0.25.0"
+tokio = { version = "1.51.1", features = ["full"] }
+mellow-lens = { path = "../mellow-lens" }
+rayon = "1.12.0"
