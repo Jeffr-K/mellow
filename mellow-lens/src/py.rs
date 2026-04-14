@@ -1,8 +1,9 @@
 use tree_sitter::StreamingIterator;
 use tree_sitter::{Parser, Query, QueryCursor};
 
-/// 파이썬 소스코드를 분석하여 위험한 시스템 호출(os.system)이 있는지 확인합니다.
-pub fn scan_python_safety(code: &str) -> bool {
+use crate::{AnalysisResult, Finding};
+
+pub fn scan_python_safety(code: &str) -> AnalysisResult {
     let mut parser = Parser::new();
 
     // tree-sitter-python v0.25.0 언어 로드
@@ -28,7 +29,23 @@ pub fn scan_python_safety(code: &str) -> bool {
 
     let query = Query::new(&language, query_str).expect("Failed to create Python query");
     let mut cursor = QueryCursor::new();
-    let matches = cursor.matches(&query, tree.root_node(), code.as_bytes());
+    let mut matches = cursor.matches(&query, tree.root_node(), code.as_bytes());
 
-    matches.count() > 0
+    let mut findings = Vec::new();
+    while let Some(m) = matches.next() {
+        for capture in m.captures {
+            let node = capture.node;
+            let start_pos = node.start_position();
+            findings.push(Finding {
+                line: start_pos.row + 1, // 0-indexed를 1-indexed로 변환
+                column: start_pos.column + 1,
+                message: "Dangerous system call detected: 'os.system'".to_string(),
+            });
+        }
+    }
+
+    AnalysisResult {
+        is_dangerous: !findings.is_empty(),
+        findings,
+    }
 }
