@@ -8,7 +8,7 @@ pub enum Language {
     TypeScript,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Finding {
     pub line: usize,
     pub column: usize,
@@ -44,6 +44,16 @@ pub fn analyze_parallel(targets: Vec<(&str, Language)>) -> AnalysisResult {
             all_findings.extend(res.findings);
         }
     }
+    // 1. 먼저 정렬 (line -> column -> message 순)
+    all_findings.sort_by(|a, b| {
+        a.line
+            .cmp(&b.line)
+            .then(a.column.cmp(&b.column))
+            .then(a.message.cmp(&b.message))
+    });
+
+    // 2. 완벽하게 겹치는 인접 항목 제거
+    all_findings.dedup();
 
     AnalysisResult {
         is_dangerous,

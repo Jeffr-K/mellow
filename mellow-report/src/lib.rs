@@ -1,11 +1,9 @@
 use colored::*;
 use mellow_lens::AnalysisResult;
+use mellow_statistics::MellowStats;
 
-pub fn print_report(result: &AnalysisResult) {
-    println!(
-        "\n{}",
-        "🔍 Mellow Detailed Security Analysis".bright_cyan().bold()
-    );
+pub fn print_report(result: &AnalysisResult, stats: &MellowStats) {
+    println!("\n{}", "🔍 Mellow Detailed Security Analysis".bright_cyan().bold());
     println!("{}", "━".repeat(50).bright_cyan());
 
     for finding in &result.findings {
@@ -16,18 +14,14 @@ pub fn print_report(result: &AnalysisResult) {
             "Line".bright_black(),
             finding.line.to_string().bright_yellow()
         );
-
         println!("   {}", finding.message.italic());
-
-        // 여기에 실제 해당 줄의 코드를 출력하는 로직을 추가하면 좋습니다.
         println!("{}", "━".repeat(50).bright_black());
     }
 
-    if result.is_dangerous {
-        println!(
-            "\n{} {}",
-            "STATUS:".bold(),
-            "EXECUTION HALTED".on_red().white().bold()
-        );
-    }
+    println!(
+        "📈 누적 보안 통계: 총 스캔 {}회 | 차단 {}회 | 승인 {}회",
+        stats.total_scans,
+        stats.blocked_count.to_string().green(),
+        stats.bypassed_count.to_string().red()
+    );
 }

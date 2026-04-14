@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 colored = "3.0.0"
 mellow-lens = { path = "../mellow-lens" }
+mellow-statistics = { path = "../mellow-statistics" }

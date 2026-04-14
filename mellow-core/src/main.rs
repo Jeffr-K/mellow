@@ -1,5 +1,6 @@
 use crate::cli::{Cli, Commands};
 use clap::Parser;
+use mellow_statistics::MellowStats;
 
 mod cli;
 mod executor;
@@ -9,30 +10,38 @@ mod prompt;
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
+    let mut stats = MellowStats::load();
 
     match &cli.command {
         Commands::Run { command } => {
-            // 1. Lens를 통해 심층 분석 수행 (Result 객체를 받아옴)
             let analysis_result = guard::analyze_command_safety(&command);
 
             if analysis_result.is_dangerous {
-                // 2. Report 모듈을 사용하여 시각적 보고서 출력
-                mellow_report::print_report(&analysis_result);
+                mellow_report::print_report(&analysis_result, &stats);
 
-                // 3. Prompt 모듈을 사용하여 사용자 승인 대기
                 if prompt::confirm_execution() {
+                    // 2. 위험을 인지하고 실행한 경우 기록
+                    stats.record_bypass();
                     println!("🌿 Mellow: Manual override detected. Executing...");
                     execute_flow(&command).await;
                 } else {
+                    // 3. 위험을 감지하여 차단한 경우 기록
+                    stats.record_block();
                     println!("🌿 Mellow: Safety first! Execution aborted.");
                 }
             } else {
-                // 4. 안전한 경우 즉시 실행
+                // 4. 깨끗한 실행 기록
+                stats.record_clean_scan();
                 execute_flow(&command).await;
             }
         }
         Commands::Config => {
+            // 나중에 여기에 현재 통계 요약을 보여주는 기능을 넣으면 좋겠네요!
             println!("Mellow v0.1.0 - Your vibe is protected.");
+            println!(
+                "Current Stats: Scans({}), Blocked({}), Bypassed({})",
+                stats.total_scans, stats.blocked_count, stats.bypassed_count
+            );
         }
     }
 }
