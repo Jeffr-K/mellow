@@ -1,9 +1,12 @@
+use ast::AnalysisResult;
 use colored::*;
-use mellow_lens::AnalysisResult;
-use mellow_statistics::MellowStats;
+use stat::MellowStats;
 
 pub fn print_report(result: &AnalysisResult, stats: &MellowStats) {
-    println!("\n{}", "🔍 Mellow Detailed Security Analysis".bright_cyan().bold());
+    println!(
+        "\n{}",
+        "🔍 Mellow Detailed Security Analysis".bright_cyan().bold()
+    );
     println!("{}", "━".repeat(50).bright_cyan());
 
     for finding in &result.findings {

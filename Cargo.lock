@@ -62,6 +62,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "ast"
+version = "0.1.1"
+dependencies = [
+ "rayon",
+ "tree-sitter",
+ "tree-sitter-python",
+ "tree-sitter-typescript",
+]
+
+[[package]]
 name = "bitflags"
 version = "2.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -130,6 +140,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
 
 [[package]]
+name = "cli"
+version = "0.1.1"
+dependencies = [
+ "ast",
+ "clap",
+ "rayon",
+ "report",
+ "stat",
+ "tokio",
+]
+
+[[package]]
 name = "colorchoice"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -168,6 +190,10 @@ name = "crossbeam-utils"
 version = "0.8.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
+
+[[package]]
+name = "daemon"
+version = "0.1.0"
 
 [[package]]
 name = "dirs"
@@ -252,6 +278,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "io"
+version = "0.1.0"
+
+[[package]]
 name = "is_terminal_polyfill"
 version = "1.70.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -285,46 +315,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "224399e74b87b5f3557511d98dff8b14089b3dadafcab6bb93eab67d3aace965"
 dependencies = [
  "scopeguard",
-]
-
-[[package]]
-name = "mellow-core"
-version = "0.1.1"
-dependencies = [
- "clap",
- "mellow-lens",
- "mellow-report",
- "mellow-statistics",
- "rayon",
- "tokio",
-]
-
-[[package]]
-name = "mellow-lens"
-version = "0.1.1"
-dependencies = [
- "rayon",
- "tree-sitter",
- "tree-sitter-python",
- "tree-sitter-typescript",
-]
-
-[[package]]
-name = "mellow-report"
-version = "0.1.0"
-dependencies = [
- "colored",
- "mellow-lens",
- "mellow-statistics",
-]
-
-[[package]]
-name = "mellow-statistics"
-version = "0.1.1"
-dependencies = [
- "dirs",
- "serde",
- "serde_json",
 ]
 
 [[package]]
@@ -473,6 +463,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dc897dd8d9e8bd1ed8cdad82b5966c3e0ecae09fb1907d58efaa013543185d0a"
 
 [[package]]
+name = "report"
+version = "0.1.0"
+dependencies = [
+ "ast",
+ "colored",
+ "stat",
+]
+
+[[package]]
 name = "scopeguard"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -552,6 +551,15 @@ checksum = "3a766e1110788c36f4fa1c2b71b387a7815aa65f88ce0229841826633d93723e"
 dependencies = [
  "libc",
  "windows-sys",
+]
+
+[[package]]
+name = "stat"
+version = "0.1.1"
+dependencies = [
+ "dirs",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

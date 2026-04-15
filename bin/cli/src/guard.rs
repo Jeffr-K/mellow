@@ -1,5 +1,5 @@
-use mellow_lens::analyze_parallel;
-use mellow_lens::{AnalysisResult, Language};
+use ast::analyze_parallel;
+use ast::{AnalysisResult, Language};
 use std::fs;
 
 pub fn analyze_command_safety(command: &str) -> AnalysisResult {

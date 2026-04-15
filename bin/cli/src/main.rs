@@ -1,6 +1,6 @@
 use crate::cli::{Cli, Commands};
 use clap::Parser;
-use mellow_statistics::MellowStats;
+use stat::MellowStats;
 
 mod cli;
 mod executor;
@@ -17,7 +17,7 @@ async fn main() {
             let analysis_result = guard::analyze_command_safety(&command);
 
             if analysis_result.is_dangerous {
-                mellow_report::print_report(&analysis_result, &stats);
+                report::print_report(&analysis_result, &stats);
 
                 if prompt::confirm_execution() {
                     // 2. 위험을 인지하고 실행한 경우 기록
